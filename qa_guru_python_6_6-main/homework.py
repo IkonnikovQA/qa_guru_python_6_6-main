@@ -28,9 +28,17 @@ def test_dark_theme_by_time_and_user_choice():
     dark_theme_enabled_by_user = True
     # TODO переключите темную тему в зависимости от времени суток,
     #  но учтите что темная тема может быть включена вручную
+    if dark_theme_enabled_by_user is not None:
+        is_dark_theme = dark_theme_enabled_by_user
+    else:
+        if current_time.hour >= 6 and current_time.hour < 18:
+            is_dark_theme = False
+        else:
+            is_dark_theme = True
 
-    is_dark_theme = None
     assert is_dark_theme is True
+    # is_dark_theme = None
+    # assert is_dark_theme is True
 
 
 def test_find_suitable_user():
@@ -47,10 +55,19 @@ def test_find_suitable_user():
 
     # TODO найдите пользователя с именем "Olga"
     suitable_users = None
+    for user in users:
+        if user["name"] == "Olga":
+            suitable_users = user
+            break
+
     assert suitable_users == {"name": "Olga", "age": 45}
 
     # TODO найдите всех пользователей младше 20 лет
-    suitable_users = None
+    suitable_users = []
+    for user in users:
+        if user["age"] < 20:
+            suitable_users.append(user)
+
     assert suitable_users == [
         {"name": "Stanislav", "age": 15},
         {"name": "Maria", "age": 18},
@@ -67,6 +84,10 @@ def test_find_suitable_user():
 # >>> open_browser(browser_name="Chrome")
 # "Open Browser [Chrome]"
 
+def print_name_def(def_name, *args):
+    result = f"{def_name.title().replace('_', ' ')} [{', '.join(args)}]"
+    print(result)
+    return result
 
 def test_readable_function():
     open_browser(browser_name="Chrome")
@@ -75,15 +96,15 @@ def test_readable_function():
 
 
 def open_browser(browser_name):
-    actual_result = None
+    actual_result = print_name_def(open_browser.__name__, browser_name)
     assert actual_result == "Open Browser [Chrome]"
 
 
 def go_to_companyname_homepage(page_url):
-    actual_result = None
+    actual_result = print_name_def(go_to_companyname_homepage.__name__, page_url)
     assert actual_result == "Go To Companyname Homepage [https://companyname.com]"
 
 
 def find_registration_button_on_login_page(page_url, button_text):
-    actual_result = None
+    actual_result = print_name_def(find_registration_button_on_login_page.__name__, page_url, button_text)
     assert actual_result == "Find Registration Button On Login Page [https://companyname.com/login, Register]"
